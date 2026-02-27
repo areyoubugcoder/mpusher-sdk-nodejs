@@ -304,7 +304,7 @@ function getHtml(baseUrl: string) {
   <footer class="border-t border-gray-800/40 mt-12">
     <div class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between text-xs text-gray-600">
       <span>Powered by <a href="https://mpusher.bugcode.dev" class="text-brand-500 hover:text-brand-400">MPusher SDK</a></span>
-      <a href="https://github.com/nicepkg/mpusher-sdk-nodejs" class="hover:text-gray-400">GitHub →</a>
+      <a href="https://github.com/areyoubugcoder/MPusher" class="hover:text-gray-400">GitHub →</a>
     </div>
   </footer>
 
@@ -315,6 +315,7 @@ function getHtml(baseUrl: string) {
 let currentPage = 1;
 const pageSize = 20;
 let totalItems = 0;
+let refreshInterval = null;
 
 // ============================================================
 // Tab 切换
@@ -326,7 +327,16 @@ function switchTab(tab) {
       ? 'pb-3 px-1 text-sm font-medium tab-active cursor-pointer'
       : 'pb-3 px-1 text-sm font-medium tab-inactive cursor-pointer';
   });
-  if (tab === 'webhook') loadArticles();
+
+  if (refreshInterval) {
+    clearInterval(refreshInterval);
+    refreshInterval = null;
+  }
+
+  if (tab === 'webhook') {
+    loadArticles();
+    refreshInterval = setInterval(loadArticles, 20000);
+  }
   if (tab === 'subscriptions') loadSubscriptions();
 }
 
@@ -415,7 +425,7 @@ async function subscribe() {
   if (!url) return showToast('请输入文章 URL', 'error');
   try {
     const result = await api('POST', '/api/subscriptions', { articleUrl: url });
-    showToast(\`订阅成功: \${result.data.mpName}\`);
+    showToast(\`订阅成功: \${result.mpName}\`);
     input.value = '';
     loadSubscriptions();
   } catch (err) {
