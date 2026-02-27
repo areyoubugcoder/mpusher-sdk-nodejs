@@ -5,6 +5,7 @@
 
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { env } from 'hono/adapter';
 import { MPusherClient, MPusherError, createHonoWebhookHandler } from '@mpusher/nodejs-sdk';
 import type { ArticlePushPayload } from '@mpusher/nodejs-sdk';
 
@@ -14,6 +15,10 @@ import type { ArticlePushPayload } from '@mpusher/nodejs-sdk';
 
 type Bindings = {
   MPUSHER_TOKEN: string;
+};
+
+type Variables = {
+  client: MPusherClient;
 };
 
 // ----------------------------------------------------------
@@ -34,26 +39,28 @@ function addArticle(article: ArticlePushPayload) {
 // 应用
 // ----------------------------------------------------------
 
-const app = new Hono<{ Bindings: Bindings }>();
+const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 app.use('*', cors());
-
-// 辅助：获取 MPusherClient
-function getClient(token: string) {
-  return new MPusherClient({ token });
-}
 
 // ----------------------------------------------------------
 // API 路由
 // ----------------------------------------------------------
 
-// 获取订阅列表
-app.get('/api/subscriptions', async (c) => {
-  const token = c.env.MPUSHER_TOKEN;
+app.use('/api/*', async (c, next) => {
+  const { MPUSHER_TOKEN: token } = env<Bindings>(c);
   if (!token) return c.json({ error: '未配置 MPUSHER_TOKEN 环境变量' }, 500);
 
+  const client = new MPusherClient({ token });
+  c.set('client', client);
+  await next();
+});
+
+// 获取订阅列表
+app.get('/api/subscriptions', async (c) => {
+  const client = c.get('client');
+
   try {
-    const client = getClient(token);
     const page = Number(c.req.query('page') || '1');
     const pageSize = Number(c.req.query('pageSize') || '20');
     const mpName = c.req.query('mpName') || undefined;
@@ -69,11 +76,9 @@ app.get('/api/subscriptions', async (c) => {
 
 // 通过文章 URL 订阅
 app.post('/api/subscriptions', async (c) => {
-  const token = c.env.MPUSHER_TOKEN;
-  if (!token) return c.json({ error: '未配置 MPUSHER_TOKEN 环境变量' }, 500);
+  const client = c.get('client');
 
   try {
-    const client = getClient(token);
     const { articleUrl } = await c.req.json<{ articleUrl: string }>();
     const result = await client.subscribeByArticleUrl(articleUrl);
     return c.json(result, 201);
@@ -87,11 +92,9 @@ app.post('/api/subscriptions', async (c) => {
 
 // 取消订阅
 app.delete('/api/subscriptions', async (c) => {
-  const token = c.env.MPUSHER_TOKEN;
-  if (!token) return c.json({ error: '未配置 MPUSHER_TOKEN 环境变量' }, 500);
+  const client = c.get('client');
 
   try {
-    const client = getClient(token);
     const { mpId } = await c.req.json<{ mpId: number }>();
     await client.unsubscribe(mpId);
     return c.body(null, 204);
@@ -105,11 +108,9 @@ app.delete('/api/subscriptions', async (c) => {
 
 // 设置推送回调地址
 app.put('/api/callback', async (c) => {
-  const token = c.env.MPUSHER_TOKEN;
-  if (!token) return c.json({ error: '未配置 MPUSHER_TOKEN 环境变量' }, 500);
+  const client = c.get('client');
 
   try {
-    const client = getClient(token);
     const body = await c.req.json<{ callbackUrl: string; authToken?: string }>();
     const result = await client.setCallback(body);
     return c.json(result);
