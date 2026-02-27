@@ -32,6 +32,38 @@ export function SettingsPanel() {
 
     return (
         <div className="animate-fade-in">
+            <div className="card rounded-xl p-5 mb-6">
+                <h3 className="text-sm font-semibold text-gray-300 mb-4 flex items-center gap-2">
+                    <Settings className="w-4 h-4 text-brand-400" />
+                    安全配置
+                </h3>
+                <p className="text-xs text-gray-500 mb-6">
+                    更新本地保存的 MPUSHER_TOKEN，这通常在原有 Token 失效时使用。
+                </p>
+
+                <div className="space-y-4 max-w-xl">
+                    <div>
+                        <label className="text-xs font-medium text-gray-400 mb-1.5 block">MPUSHER_TOKEN</label>
+                        <input
+                            type="password"
+                            placeholder="输入新的 Token 覆盖本地记录"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    const val = (e.target as HTMLInputElement).value.trim();
+                                    if (val) {
+                                        localStorage.setItem('MPUSHER_TOKEN', val);
+                                        showToast('Token 更新成功，即将刷新页面');
+                                        setTimeout(() => window.location.reload(), 1500);
+                                    }
+                                }
+                            }}
+                            className="w-full px-4 py-2.5 rounded-lg text-sm bg-gray-800/50 border border-gray-700/50 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all outline-none font-mono"
+                        />
+                        <p className="text-[10px] text-gray-500 mt-1.5">输入新 Token 后按回车键保存并刷新页面</p>
+                    </div>
+                </div>
+            </div>
+
             <div className="card rounded-xl p-5">
                 <h3 className="text-sm font-semibold text-gray-300 mb-4 flex items-center gap-2">
                     <Settings className="w-4 h-4 text-brand-400" />

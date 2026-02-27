@@ -1,4 +1,4 @@
-import { MPusherClient } from '@mpusher/nodejs-sdk';
+import { MPusherClient, MPusherError } from '@mpusher/nodejs-sdk';
 import type { ArticlePushPayload } from '@mpusher/nodejs-sdk';
 
 // ----------------------------------------------------------
@@ -6,16 +6,19 @@ import type { ArticlePushPayload } from '@mpusher/nodejs-sdk';
 // ----------------------------------------------------------
 let clientInstance: MPusherClient | null = null;
 
-export function getMPusherClient() {
-    if (clientInstance) return clientInstance;
-
-    const token = process.env.MPUSHER_TOKEN;
-    if (!token) {
-        throw new Error('未配置 MPUSHER_TOKEN 环境变量');
+export function getMPusherClient(token?: string | null) {
+    if (!clientInstance && !token) {
+        throw new MPusherError('未配置 MPUSHER_TOKEN 环境变量或请求头', 401);
     }
 
-    clientInstance = new MPusherClient({ token });
-    return clientInstance;
+    if (token) {
+        // 如果传入了新的 token 且与当前不同，则重新实例化
+        if (!clientInstance || clientInstance['token'] !== token) {
+            clientInstance = new MPusherClient({ token });
+        }
+    }
+
+    return clientInstance as MPusherClient;
 }
 
 // ----------------------------------------------------------

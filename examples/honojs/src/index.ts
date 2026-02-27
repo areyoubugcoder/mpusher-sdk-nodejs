@@ -47,12 +47,20 @@ app.use('*', cors());
 // API 路由
 // ----------------------------------------------------------
 
-app.use('/api/*', async (c, next) => {
-  const { MPUSHER_TOKEN: token } = env<Bindings>(c);
-  if (!token) return c.json({ error: '未配置 MPUSHER_TOKEN 环境变量' }, 500);
+// 全局单例客户端
+let globalClient: MPusherClient | null = null;
 
-  const client = new MPusherClient({ token });
-  c.set('client', client);
+app.use('/api/*', async (c, next) => {
+  const token = c.req.header('x-mpusher-token');
+  if (!token && !globalClient) {
+    return c.json({ error: '未配置 x-mpusher-token 请求头' }, 401);
+  }
+
+  if (token && (!globalClient || globalClient['token'] !== token)) {
+    globalClient = new MPusherClient({ token });
+  }
+
+  c.set('client', globalClient as MPusherClient);
   await next();
 });
 
@@ -201,6 +209,28 @@ function getHtml(baseUrl: string) {
 </head>
 <body class="dark bg-gray-950 text-gray-200 min-h-screen">
 
+  <!-- Token Dialog -->
+  <div id="tokenDialog" class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-950/80 backdrop-blur-sm p-4 fade-in" style="display:none;">
+    <div class="bg-gray-900 border border-gray-800 shadow-2xl rounded-2xl p-6 sm:p-8 w-full max-w-md relative overflow-hidden">
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-brand-500/20 blur-[60px] pointer-events-none"></div>
+      <div class="relative">
+        <div class="w-12 h-12 bg-gray-800/80 rounded-xl flex items-center justify-center mb-6 border border-gray-700/50 text-2xl">
+          🔑
+        </div>
+        <h2 class="text-xl font-bold text-white mb-2 tracking-tight">配置 MPUSHER_TOKEN</h2>
+        <p class="text-sm text-gray-400 mb-6">
+          检测到本地尚未配置 API Token。请输入您的 MPUSHER_TOKEN 以继续体验服务，该 Token 将仅保存在您的浏览器本地。
+        </p>
+        <div class="space-y-4">
+          <input id="globalTokenInput" type="text" placeholder="请输入 MPUSHER_TOKEN..." class="w-full px-4 py-3 bg-gray-950 border border-gray-800 rounded-xl text-sm text-white placeholder:text-gray-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all font-mono" />
+          <button onclick="saveGlobalToken()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-medium py-3 rounded-xl transition-all">
+            保存配置
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Container -->
   <div id="toastContainer"></div>
 
@@ -297,6 +327,18 @@ function getHtml(baseUrl: string) {
           <button onclick="saveCallback()" class="btn-primary text-white px-5 py-2.5 rounded-lg text-sm font-medium">保存配置</button>
         </div>
       </div>
+
+      <div class="card rounded-xl p-5 mt-6">
+        <h3 class="text-sm font-semibold text-gray-300 mb-4">安全配置</h3>
+        <p class="text-xs text-gray-500 mb-4">更新本地保存的 MPUSHER_TOKEN，这通常在原有 Token 失效时使用。</p>
+        <div class="space-y-3">
+          <div>
+            <label class="text-xs text-gray-400 mb-1 block">MPUSHER_TOKEN</label>
+            <input id="settingsTokenInput" type="password" placeholder="输入新的 Token 覆盖本地记录" class="w-full px-4 py-2.5 rounded-lg text-sm font-mono" onkeyup="if(event.key==='Enter')updateSettingsToken()" />
+            <p class="text-[10px] text-gray-500 mt-1.5">输入新 Token 后按回车键保存并刷新页面</p>
+          </div>
+        </div>
+      </div>
     </div>
 
   </main>
@@ -357,15 +399,55 @@ function showToast(message, type = 'success') {
 }
 
 // ============================================================
+// Token Management
+// ============================================================
+function checkToken() {
+  const token = localStorage.getItem('MPUSHER_TOKEN');
+  if (!token) {
+    document.getElementById('tokenDialog').style.display = 'flex';
+    return false;
+  }
+  return true;
+}
+
+function saveGlobalToken() {
+  const input = document.getElementById('globalTokenInput').value.trim();
+  if (input) {
+    localStorage.setItem('MPUSHER_TOKEN', input);
+    document.getElementById('tokenDialog').style.display = 'none';
+    loadSubscriptions(); // Retry loading
+  }
+}
+
+function updateSettingsToken() {
+  const input = document.getElementById('settingsTokenInput').value.trim();
+  if (input) {
+    localStorage.setItem('MPUSHER_TOKEN', input);
+    showToast('Token 更新成功，即将刷新页面');
+    setTimeout(() => window.location.reload(), 1500);
+  }
+}
+
+// ============================================================
 // API
 // ============================================================
 async function api(method, path, body) {
-  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  const token = localStorage.getItem('MPUSHER_TOKEN');
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['x-mpusher-token'] = token;
+
+  const opts = { method, headers };
   if (body) opts.body = JSON.stringify(body);
   const res = await fetch(path, opts);
   if (res.status === 204) return null;
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || data.message || '请求失败');
+  if (!res.ok) {
+    if (res.status === 401) {
+      localStorage.removeItem('MPUSHER_TOKEN');
+      checkToken();
+    }
+    throw new Error(data.error || data.message || '请求失败');
+  }
   return data;
 }
 
@@ -513,7 +595,9 @@ function formatTime(ts) {
 // ============================================================
 // 初始化
 // ============================================================
-loadSubscriptions();
+if (checkToken()) {
+  loadSubscriptions();
+}
 </script>
 </body>
 </html>`;

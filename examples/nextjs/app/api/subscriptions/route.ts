@@ -4,7 +4,8 @@ import { MPusherError } from '@mpusher/nodejs-sdk';
 
 export async function GET(request: NextRequest) {
     try {
-        const client = getMPusherClient();
+        const token = request.headers.get('x-mpusher-token');
+        const client = getMPusherClient(token);
         const searchParams = request.nextUrl.searchParams;
         const page = Number(searchParams.get('page') || '1');
         const pageSize = Number(searchParams.get('pageSize') || '20');
@@ -22,7 +23,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        const client = getMPusherClient();
+        const token = request.headers.get('x-mpusher-token');
+        const client = getMPusherClient(token);
         const body = await request.json();
         const { articleUrl } = body;
 
@@ -38,7 +40,8 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
     try {
-        const client = getMPusherClient();
+        const token = request.headers.get('x-mpusher-token');
+        const client = getMPusherClient(token);
         const body = await request.json();
         const { mpId } = body;
 

@@ -19,11 +19,21 @@ export interface ArticlesResponse {
     total: number;
 }
 
+function getHeaders(extraHeaders: Record<string, string> = {}) {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('MPUSHER_TOKEN') : null;
+    return {
+        ...extraHeaders,
+        ...(token ? { 'x-mpusher-token': token } : {})
+    };
+}
+
 export async function fetchSubscriptions(page = 1, pageSize = 20, mpName?: string): Promise<SubscriptionsResponse> {
     const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
     if (mpName) params.set('mpName', mpName);
 
-    const res = await fetch(`/api/subscriptions?${params}`);
+    const res = await fetch(`/api/subscriptions?${params}`, {
+        headers: getHeaders()
+    });
     if (!res.ok) {
         const error = await res.json();
         throw new Error(error.error || 'Failed to fetch subscriptions');
@@ -34,7 +44,7 @@ export async function fetchSubscriptions(page = 1, pageSize = 20, mpName?: strin
 export async function addSubscription(articleUrl: string) {
     const res = await fetch('/api/subscriptions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ articleUrl }),
     });
     if (!res.ok) {
@@ -47,7 +57,7 @@ export async function addSubscription(articleUrl: string) {
 export async function removeSubscription(mpId: number) {
     const res = await fetch('/api/subscriptions', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ mpId }),
     });
     if (res.status === 204) return;
@@ -70,7 +80,7 @@ export async function fetchArticles(): Promise<ArticlesResponse> {
 export async function saveCallbackConfig(callbackUrl: string, authToken?: string) {
     const res = await fetch('/api/callback', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ callbackUrl, authToken: authToken || undefined }),
     });
     if (!res.ok) {

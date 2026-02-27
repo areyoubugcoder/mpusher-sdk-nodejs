@@ -6,7 +6,7 @@
 
 ### 部署到 Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fareyoubugcoder%2Fmpusher-sdk-nodejs%2Ftree%2Fmain%2Fexamples%2Fdemo&env=MPUSHER_TOKEN&envDescription=MPusher%20API%20Token&envLink=https%3A%2F%2Fmpusher.bugcode.dev%2Fdocs%2Fguide%2Fquick-start.html&project-name=mpusher-demo)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fareyoubugcoder%2Fmpusher-sdk-nodejs%2Ftree%2Fmain%2Fexamples%2Fdemo&project-name=mpusher-demo)
 
 ## 本地开发
 

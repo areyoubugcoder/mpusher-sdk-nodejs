@@ -4,7 +4,8 @@ import { MPusherError } from '@mpusher/nodejs-sdk';
 
 export async function PUT(request: NextRequest) {
     try {
-        const client = getMPusherClient();
+        const token = request.headers.get('x-mpusher-token');
+        const client = getMPusherClient(token);
         const body = await request.json();
 
         const result = await client.setCallback(body);
