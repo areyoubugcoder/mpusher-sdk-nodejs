@@ -1,8 +1,8 @@
 {
     "name": "mpusher-demo",
     "version": "1.0.0",
-    "private": true,
     "description": "MPusher SDK Demo - 一键部署体验微信公众号文章推送服务",
+    "type": "module",
     "scripts": {
         "dev": "wrangler dev",
         "deploy:cf": "wrangler deploy",
@@ -14,6 +14,7 @@
     },
     "devDependencies": {
         "@cloudflare/workers-types": "^4.20260304.0",
+        "esbuild": "^0.25.0",
         "typescript": "^5.9.3",
         "wrangler": "^4.68.1"
     }
