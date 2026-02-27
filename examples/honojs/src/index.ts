@@ -21,13 +21,17 @@ type Variables = {
 };
 
 // ----------------------------------------------------------
-// 内存存储（最近 50 条推送文章）
+// 内存存储（最近 50 条推送文章）去重处理
 // ----------------------------------------------------------
 
 const receivedArticles: ArticlePushPayload[] = [];
 const MAX_ARTICLES = 50;
 
 function addArticle(article: ArticlePushPayload) {
+  // 去重处理
+  if (receivedArticles.some(a => a.articleId === article.articleId)) {
+    return;
+  }
   receivedArticles.unshift(article);
   if (receivedArticles.length > MAX_ARTICLES) {
     receivedArticles.pop();
