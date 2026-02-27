@@ -6,7 +6,7 @@
 
 ### 部署到 Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnicepkg%2Fmpusher-sdk-nodejs%2Ftree%2Fmain%2Fexamples%2Fnextjs&env=MPUSHER_TOKEN&envDescription=MPusher%20API%20Token&envLink=https%3A%2F%2Fmpusher.bugcode.dev%2Fdocs%2Fguide%2Fquick-start.html&project-name=mpusher-demo-nextjs)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fareyoubugcoder%2Fmpusher-sdk-nodejs%2Ftree%2Fmain%2Fexamples%2Fnextjs&env=MPUSHER_TOKEN&envDescription=MPusher%20API%20Token&envLink=https%3A%2F%2Fmpusher.bugcode.dev%2Fdocs%2Fguide%2Fquick-start.html&project-name=mpusher-demo-nextjs)
 
 ## 本地开发
 
