@@ -105,7 +105,7 @@ export default function Home() {
             </a>
           </span>
           <a
-            href="https://github.com/nicepkg/mpusher-sdk-nodejs"
+            href="https://github.com/areyoubugcoder/mpusher-sdk-nodejs"
             target="_blank"
             rel="noreferrer"
             className="hover:text-gray-300 transition-colors flex items-center gap-1"

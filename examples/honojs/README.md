@@ -6,7 +6,7 @@
 
 ### 部署到 Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fareyoubugcoder%2Fmpusher-sdk-nodejs%2Ftree%2Fmain%2Fexamples%2Fdemo&project-name=mpusher-demo)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fareyoubugcoder%2Fmpusher-sdk-nodejs%2Ftree%2Fmain%2Fexamples%2Fhonojs&repository-name=mpusher-honojs)
 
 ## 本地开发
 

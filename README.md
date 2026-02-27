@@ -11,13 +11,13 @@
 
 您可以直接一键体验 MPusher 提供的带有前端管理界面的演示项目：
 
-### 部署 Hono 版本
+### 部署到 Vercel (Hono 版本)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fareyoubugcoder%2Fmpusher-sdk-nodejs%2Ftree%2Fmain%2Fexamples%2Fdemo&env=MPUSHER_TOKEN&envDescription=MPusher%20API%20Token&envLink=https%3A%2F%2Fmpusher.bugcode.dev%2Fdocs%2Fguide%2Fquick-start.html&project-name=mpusher-demo)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fareyoubugcoder%2Fmpusher-sdk-nodejs%2Ftree%2Fmain%2Fexamples%2Fhonojs&repository-name=mpusher-honojs)
 
-### 部署 Next.js 版本
+### 部署到 Vercel (Next.js 版本)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fareyoubugcoder%2Fmpusher-sdk-nodejs%2Ftree%2Fmain%2Fexamples%2Fnextjs&env=MPUSHER_TOKEN&envDescription=MPusher%20API%20Token&envLink=https%3A%2F%2Fmpusher.bugcode.dev%2Fdocs%2Fguide%2Fquick-start.html&project-name=mpusher-demo-nextjs)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fareyoubugcoder%2Fmpusher-sdk-nodejs%2Ftree%2Fmain%2Fexamples%2Fnextjs&repository-name=mpusher-nextjs)
 
 ## 安装
 
@@ -110,8 +110,6 @@ try {
   }
 }
 ```
-
-> 鉴权由您自己的框架中间件处理，SDK 不重复提供 Token 验证。
 
 ### Express
 

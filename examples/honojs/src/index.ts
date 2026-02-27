@@ -5,7 +5,6 @@
 
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import { env } from 'hono/adapter';
 import { MPusherClient, MPusherError, createHonoWebhookHandler } from '@mpusher/nodejs-sdk';
 import type { ArticlePushPayload } from '@mpusher/nodejs-sdk';
 
@@ -345,8 +344,8 @@ function getHtml(baseUrl: string) {
 
   <footer class="border-t border-gray-800/40 mt-12">
     <div class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between text-xs text-gray-600">
-      <span>Powered by <a href="https://mpusher.bugcode.dev" class="text-brand-500 hover:text-brand-400">MPusher SDK</a></span>
-      <a href="https://github.com/areyoubugcoder/MPusher" class="hover:text-gray-400">GitHub →</a>
+      <span>Powered by <a href="https://mpusher.bugcode.dev" target="_blank" class="text-brand-500 hover:text-brand-400">MPusher SDK</a></span>
+      <a href="https://github.com/areyoubugcoder/mpusher-sdk-nodejs" target="_blank" class="hover:text-gray-400">GitHub →</a>
     </div>
   </footer>
 
