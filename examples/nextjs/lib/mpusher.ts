@@ -27,7 +27,7 @@ export function getMPusherClient(token?: string | null) {
 // 文件持久化存储（最近 50 条推送文章）
 // ----------------------------------------------------------
 const MAX_ARTICLES = 50;
-const DATA_DIR = path.join(process.cwd(), 'data');
+const DATA_DIR = path.join('/tmp', 'data');
 const DATA_FILE = path.join(DATA_DIR, 'articles.json');
 
 function ensureDataDir() {
