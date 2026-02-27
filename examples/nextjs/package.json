@@ -1,6 +1,7 @@
 {
-  "name": "nextjs",
-  "version": "0.1.0",
+  "name": "mpusher-demo",
+  "version": "1.0.0",
+  "description": "MPusher SDK Demo - 一键部署体验微信公众号文章推送服务",
   "private": true,
   "scripts": {
     "dev": "next dev",

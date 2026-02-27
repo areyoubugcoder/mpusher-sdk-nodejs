@@ -7,6 +7,18 @@
 - ✅ **全平台兼容**：Node.js / Cloudflare Workers / Vercel / Deno / Bun
 - ✅ **6 种 Webhook 适配器**：Express、Koa、Hapi、Hono、Cloudflare Workers、Vercel/Next.js
 
+## 一键部署体验
+
+您可以直接一键体验 MPusher 提供的带有前端管理界面的演示项目：
+
+### 部署 Hono 版本
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fareyoubugcoder%2Fmpusher-sdk-nodejs%2Ftree%2Fmain%2Fexamples%2Fdemo&env=MPUSHER_TOKEN&envDescription=MPusher%20API%20Token&envLink=https%3A%2F%2Fmpusher.bugcode.dev%2Fdocs%2Fguide%2Fquick-start.html&project-name=mpusher-demo)
+
+### 部署 Next.js 版本
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnicepkg%2Fmpusher-sdk-nodejs%2Ftree%2Fmain%2Fexamples%2Fnextjs&env=MPUSHER_TOKEN&envDescription=MPusher%20API%20Token&envLink=https%3A%2F%2Fmpusher.bugcode.dev%2Fdocs%2Fguide%2Fquick-start.html&project-name=mpusher-demo-nextjs)
+
 ## 安装
 
 ```bash
