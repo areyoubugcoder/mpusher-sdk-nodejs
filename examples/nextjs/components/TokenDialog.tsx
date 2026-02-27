@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { KeyRound, ArrowRight } from 'lucide-react';
+import { KeyRound, ArrowRight, Loader2 } from 'lucide-react';
+import { saveCallbackConfig } from '@/lib/api';
 
 export function TokenDialog() {
     const [mounted, setMounted] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [token, setToken] = useState('');
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -16,11 +18,22 @@ export function TokenDialog() {
         }
     }, []);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const trimmed = token.trim();
         if (trimmed) {
             localStorage.setItem('MPUSHER_TOKEN', trimmed);
+            setSaving(true);
+
+            // 自动配置推送回调地址
+            try {
+                const callbackUrl = `${window.location.origin}/webhook`;
+                await saveCallbackConfig(callbackUrl);
+            } catch {
+                // 回调配置失败不阻塞流程，用户可在设置页手动配置
+                console.warn('自动配置推送回调失败，可在设置页手动配置');
+            }
+
             setIsOpen(false);
             // Reload to re-initialize React Query with the new token headers
             window.location.reload();
@@ -58,11 +71,20 @@ export function TokenDialog() {
                         </div>
                         <button
                             type="submit"
-                            disabled={!token.trim()}
+                            disabled={!token.trim() || saving}
                             className="w-full bg-brand-600 hover:bg-brand-500 text-white font-medium py-3 rounded-xl transition-all disabled:opacity-50 disabled:hover:bg-brand-600 flex items-center justify-center gap-2 group"
                         >
-                            保存配置
-                            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                            {saving ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    配置中...
+                                </>
+                            ) : (
+                                <>
+                                    保存配置
+                                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                                </>
+                            )}
                         </button>
                     </form>
                 </div>

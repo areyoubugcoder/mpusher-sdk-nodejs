@@ -409,12 +409,21 @@ function checkToken() {
   return true;
 }
 
-function saveGlobalToken() {
+async function saveGlobalToken() {
   const input = document.getElementById('globalTokenInput').value.trim();
   if (input) {
     localStorage.setItem('MPUSHER_TOKEN', input);
     document.getElementById('tokenDialog').style.display = 'none';
     loadSubscriptions(); // Retry loading
+
+    // 自动配置推送回调地址
+    try {
+      const callbackUrl = window.location.origin + '/webhook';
+      await api('PUT', '/api/callback', { callbackUrl });
+      showToast('已自动配置推送回调地址');
+    } catch (err) {
+      showToast('自动配置回调失败: ' + err.message, 'error');
+    }
   }
 }
 
