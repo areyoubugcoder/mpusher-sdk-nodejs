@@ -1,0 +1,12 @@
+name = "mpusher-demo"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# 解决 pnpm workspace 中 node_modules 解析问题
+[build]
+command = ""
+
+[vars]
+# 在 Cloudflare Dashboard 或通过 wrangler secret put 设置
+# MPUSHER_TOKEN = "your-token-here"

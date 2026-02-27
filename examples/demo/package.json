@@ -1,0 +1,20 @@
+{
+    "name": "mpusher-demo",
+    "version": "1.0.0",
+    "private": true,
+    "description": "MPusher SDK Demo - 一键部署体验微信公众号文章推送服务",
+    "scripts": {
+        "dev": "wrangler dev",
+        "deploy:cf": "wrangler deploy",
+        "deploy:vercel": "vercel"
+    },
+    "dependencies": {
+        "hono": "^4.12.2",
+        "@mpusher/nodejs-sdk": "^1.0.0"
+    },
+    "devDependencies": {
+        "@cloudflare/workers-types": "^4.20260304.0",
+        "typescript": "^5.9.3",
+        "wrangler": "^4.68.1"
+    }
+}
