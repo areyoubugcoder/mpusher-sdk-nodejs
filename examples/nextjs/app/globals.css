@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #f0f5ff;
+  --color-brand-100: #e0eaff;
+  --color-brand-200: #c2d5ff;
+  --color-brand-300: #94b8ff;
+  --color-brand-400: #6b9fff;
+  --color-brand-500: #4a80f0;
+  --color-brand-600: #3366e0;
+  --color-brand-700: #2952cc;
+  --color-brand-800: #1e3d99;
+  --color-brand-900: #142b66;
+  
+  --animate-fade-in: fadeIn 0.3s ease-in;
+  --animate-slide-in: slideIn 0.3s ease;
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, var(--color-brand-500), var(--color-brand-600));
+    transition: all 0.2s;
+  }
+  .btn-primary:active {
+    transform: translateY(1px);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(74, 128, 240, 0.4);
+  }
+
+  .btn-danger {
+    background: linear-gradient(135deg, #f04a4a, #e03333);
+    transition: all 0.2s;
+  }
+  .btn-danger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(240, 74, 74, 0.4);
+  }
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #e2e8f0;
+  background-color: #030712; /* gray-950 */
+}
+
+/* Custom Webkit scrollbar matching demo */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }

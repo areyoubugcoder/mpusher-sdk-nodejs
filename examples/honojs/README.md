@@ -8,18 +8,6 @@
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fareyoubugcoder%2Fmpusher-sdk-nodejs%2Ftree%2Fmain%2Fexamples%2Fdemo&env=MPUSHER_TOKEN&envDescription=MPusher%20API%20Token&envLink=https%3A%2F%2Fmpusher.bugcode.dev%2Fdocs%2Fguide%2Fquick-start.html&project-name=mpusher-demo)
 
-### 部署到 Cloudflare Workers
-
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/areyoubugcoder/mpusher-sdk-nodejs/tree/main/examples/demo)
-
-> 部署后需要设置环境变量 `MPUSHER_TOKEN`，可在对应平台的 Dashboard 中配置。
-
-## 环境变量
-
-| 变量 | 必填 | 说明 |
-|------|------|------|
-| `MPUSHER_TOKEN` | ✅ | MPusher API Token，[获取方式](https://mpusher.bugcode.dev/docs/guide/quick-start.html) |
-
 ## 本地开发
 
 ```bash
